@@ -71,6 +71,7 @@ class Client:
             session = ClientSession(timeout=ClientTimeout(total=DEFAULT_TIMEOUT))
 
         assert session
+        _LOGGER.warning("Making request with session: %s method: %s, url: %s", session, method, url)
 
         for attempt in range(2):
             try:
@@ -85,6 +86,8 @@ class Client:
                 # decide what to do. In this case we want to retry as it likely
                 # means the connection was stale and the server closed it on us.
                 if attempt == 0:
+                    _LOGGER.warning("DISCONNECTED,RETRY request with session: %s method: %s, url: %s", session, method, url)
+
                     continue
                 raise
             except ClientError as err:
