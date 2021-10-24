@@ -78,6 +78,7 @@ class Client:
                 async with async_timeout.timeout(self._request_timeout):
                     async with session.request(method, url, ssl=ssl, **kwargs) as resp:
                         resp.raise_for_status()
+                        _LOGGER.warning("Got response to %s: %s (%s)", url, resp, resp.headers)
                         data = await resp.json(content_type=None)
                         _raise_for_remote_status(url, data)
             except ServerDisconnectedError:
